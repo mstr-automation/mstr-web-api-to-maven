@@ -1,0 +1,41 @@
+plugins {
+  id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id 'java'
+  id 'maven-publish'
+}
+
+processResources {
+    from(zipTree("src/resources/MicroStrategy.war")) {
+        include "WEB-INF/lib/*.jar"
+        exclude "WEB-INF/lib/mstr-saml.jar"
+        exclude "WEB-INF/lib/Certificate*.jar"
+        eachFile { f ->
+            f.relativePath = new RelativePath(true, f.relativePath.segments.drop(2)) 
+        }
+        includeEmptyDirs = false
+    }
+}
+
+shadowJar {
+  classifier = null
+}
+
+publishing {
+  publications {
+    shadow(MavenPublication) { publication ->
+        project.shadow.component(publication)
+        groupId = 'unofficial.com.microstrategy'
+        artifactId = 'microstrategy-web-api'
+        version = mstrVersion
+    }
+  }
+  repositories {
+    maven {
+      url nexusRepoURL
+      credentials {
+          username = nexusUsername
+          password = nexusPassword
+      }
+    }
+  }
+}
