@@ -4,6 +4,8 @@ plugins {
   id 'maven-publish'
 }
 
+group = 'unofficial.com.microstrategy'
+
 processResources {
     from(zipTree("src/resources/MicroStrategy.war")) {
         include "WEB-INF/lib/*.jar"
@@ -23,9 +25,17 @@ shadowJar {
 publishing {
   publications {
     shadow(MavenPublication) { publication ->
-        project.shadow.component(publication)
-        groupId = 'unofficial.com.microstrategy'
         artifactId = 'microstrategy-web-api'
+        version = mstrVersion
+    }
+    mstrWeb(MavenPublication) { publication -> 
+        artifact "src/resources/MicroStrategy.war"
+        artifactId = "microstrategy-web-application"
+        version = mstrVersion
+    }    
+    mstrLibrary(MavenPublication) { publication -> 
+        artifact "src/resources/MicroStrategyLibrary.war"
+        artifactId = "microstrategy-library-application"
         version = mstrVersion
     }
   }

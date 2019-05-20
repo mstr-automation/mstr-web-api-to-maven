@@ -10,5 +10,7 @@ src/resources/*.war
 # Don't commit the local gradle.properties file
 gradle.properties
 
+.classpath
 .project
 .settings/
+.vscode/
