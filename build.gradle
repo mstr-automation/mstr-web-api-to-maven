@@ -26,7 +26,9 @@ publishing {
   publications {
     shadow(MavenPublication) { publication ->
         artifactId = 'microstrategy-web-api'
-        version = mstrVersion
+        artifact shadowJar
+                version = mstrVersion
+
     }
     mstrWeb(MavenPublication) { publication -> 
         artifact "src/resources/MicroStrategy.war"
@@ -36,6 +38,16 @@ publishing {
     mstrLibrary(MavenPublication) { publication -> 
         artifact "src/resources/MicroStrategyLibrary.war"
         artifactId = "microstrategy-library-application"
+        version = mstrVersion
+    }
+    mstrCommunityConnectors(MavenPublication) { publication -> 
+        artifact "src/resources/CommunityConnectors.war"
+        artifactId = "microstrategy-community-connectors"
+        version = mstrVersion
+    }
+    mstrWebServices(MavenPublication) { publication -> 
+        artifact "src/resources/MicroStrategyWS.war"
+        artifactId = "microstrategy-web-services"
         version = mstrVersion
     }
   }
