@@ -22,6 +22,12 @@ shadowJar {
   classifier = null
 }
 
+task extractLibraryJar(type: Copy) {
+  from(zipTree("src/resources/MicroStrategyLibrary.war")) 
+  include "WEB-INF/lib/restful-api-1.0-SNAPSHOT-jar-with-dependencies.jar"
+  into project.buildDir
+}
+
 publishing {
   publications {
     shadow(MavenPublication) { publication ->
@@ -50,6 +56,11 @@ publishing {
         artifactId = "microstrategy-web-services"
         version = mstrVersion
     }
+    mstrLibraryApi(MavenPublication) { publication ->
+      artifact "${project.buildDir}/WEB-INF/lib/restful-api-1.0-SNAPSHOT-jar-with-dependencies.jar"
+      artifactId = "microstrategy-library-api"
+      version = mstrVersion
+    }
   }
   repositories {
     maven {
@@ -60,4 +71,8 @@ publishing {
       }
     }
   }
+}
+
+publishMstrLibraryApiPublicationToMavenRepository {
+  dependsOn 'extractLibraryJar'
 }
